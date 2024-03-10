@@ -1,7 +1,12 @@
+import SectionHeader from '@/components/section-header'
+
 export default function Magazine() {
     return (
         <>
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Magazine</h1>
+            <SectionHeader headerInfo={{
+                title: '期刊',
+                summary: '这里是打包好的期刊'
+            }} />
         </>
     )
 }

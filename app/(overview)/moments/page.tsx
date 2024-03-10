@@ -1,11 +1,11 @@
 import SectionHeader from '@/components/section-header'
 
-export default function Discussion() {
+export default function Magazine() {
     return (
         <>
             <SectionHeader headerInfo={{
-                title: '讨论',
-                summary: '这里是所有的聊天片段'
+                title: '动态',
+                summary: '看看群友有没有什么新活'
             }} />
         </>
     )

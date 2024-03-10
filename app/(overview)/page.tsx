@@ -1,7 +1,23 @@
+import SectionHeader from '@/components/section-header'
+// import '@/script/init'
+
 export default function Welcome() {
   return (
     <>
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">Welcome</h1>
+      <SectionHeader headerInfo={{
+        title: '热门讨论',
+        summary: '早上好，牛马'
+      }} />
+
+      <SectionHeader headerInfo={{
+        title: '最新更新',
+        summary: '早上好，牛马'
+      }} />
+
+      <SectionHeader headerInfo={{
+        title: '最新动态',
+        summary: '早上好，牛马'
+      }} />
     </>
   )
 }
