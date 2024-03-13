@@ -1,7 +1,7 @@
 import query from './index'
 
 class UserService {
-    async getUserByEmail(email: string): any {
+    async getUserByEmail(email: string) {
         const statements = `SELECT * FROM users WHERE email = ?`
 
         const [result] = await query(statements, [email])

@@ -1,15 +1,26 @@
 'use client'
 
-import { MessageSquareText, Sparkles, Gauge, Home, Settings } from 'lucide-react'
+import {
+    MessageSquareText,
+    Sparkles,
+    Gauge,
+    Home,
+    Settings,
+    FilePenLine,
+} from 'lucide-react'
 
 import ThemeToggle from '@/components/theme-toggle'
 import Nav from '@/components/nav'
-
 const dashboardLinks = [
     {
         href: '/dashboard',
         title: '仪表盘',
         icon: Gauge
+    },
+    {
+        href: '/dashboard/editer',
+        title: '讨论编辑器',
+        icon: FilePenLine
     },
     {
         href: '/dashboard/star',
@@ -18,7 +29,7 @@ const dashboardLinks = [
     },
     {
         href: '/dashboard/discussion',
-        title: '管理讨论',
+        title: '讨论',
         icon: MessageSquareText
     },
     {

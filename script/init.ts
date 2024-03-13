@@ -11,7 +11,7 @@ async function seedUesrs() {
         CREATE TABLE IF NOT EXISTS users (
             uid VARCHAR(255) NOT NULL,
             id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-            username VARCHAR(255),
+            name VARCHAR(255),
             email VARCHAR(255) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -102,6 +102,102 @@ async function seedSettings() {
     await query(statements)
 }
 
+// 聊天
+async function seedDiscussions() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS discussions (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            title VARCHAR(255),
+            description VARCHAR(255),
+            user_id INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
+// 聊天信息
+async function seedMessages() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS messages (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            discussions_id INT,
+            star_id INT,
+            content MEDIUMTEXT,
+            play_order INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
+// 领衔主演
+async function seedStars() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS stars (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            nickname VARCHAR(255),
+            description VARCHAR(255),
+            avatar_url VARCHAR(255),
+            user_id INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
+// 动态
+async function seedMoments() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS moments (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            content MEDIUMTEXT,
+            user_id INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
+// 评论表
+async function seedComments() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS comments (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            content MEDIUMTEXT,
+            target_uid VARCHAR(255),
+            user_id INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
+// 点赞表
+async function seedLikes() {
+    const statements = `
+        CREATE TABLE IF NOT EXISTS likes (
+            uid VARCHAR(255) NOT NULL,
+            id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+            target_uid VARCHAR(255),
+            user_id INT,
+            create_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            update_timestamp TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );`
+
+    await query(statements)
+}
+
 async function initalizeData() {
     // 初始化设置表中的数据
     const insertRegisterSettingsStatements = `
@@ -180,6 +276,12 @@ async function main() {
     await seedUserRole()
     await seedRolePermission()
     await seedSettings()
+    await seedStars()
+    await seedDiscussions()
+    await seedMessages()
+    await seedMoments()
+    await seedComments()
+    await seedLikes()
 
     try {
         await initalizeData()
@@ -193,5 +295,5 @@ async function main() {
 }
 
 main().catch((error) => {
-    console.log('数据库配置失败')
+    console.log(error)
 })

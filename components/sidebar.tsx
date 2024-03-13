@@ -1,6 +1,6 @@
 'use client'
 
-import { LibraryBig, Home, MessagesSquare, Gauge, UsersRound } from 'lucide-react'
+import { Home, MessagesSquare, Gauge, UsersRound } from 'lucide-react'
 import ThemeToggle from '@/components/theme-toggle'
 import Nav from '@/components/nav'
 
@@ -9,11 +9,6 @@ const links = [
         href: '/',
         title: '首页',
         icon: Home
-    },
-    {
-        href: '/magazine',
-        title: '期刊',
-        icon: LibraryBig
     },
     {
         href: '/discussion',

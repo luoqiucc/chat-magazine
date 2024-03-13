@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
@@ -24,6 +25,7 @@ import {
 } from '@/components/ui/card'
 
 import { authenticate } from '@/lib/action/auth'
+import ErrorTip from '../error-tip'
 
 const FormSchema = z.object({
     email: z.string().email({
@@ -35,6 +37,8 @@ const FormSchema = z.object({
 })
 
 export default function LoginForm() {
+    const [message, setMessage] = useState(null)
+
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -47,7 +51,7 @@ export default function LoginForm() {
         const formData = new FormData()
         formData.append('email', data.email)
         formData.append('password', data.password)
-        await authenticate(formData)
+        setMessage(await authenticate(formData))
     }
 
     return (
@@ -61,7 +65,6 @@ export default function LoginForm() {
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <CardContent className='space-y-4 w-[300px]'>
                             <FormField
-
                                 control={form.control}
                                 name='email'
                                 render={({ field }) => (
@@ -99,6 +102,7 @@ export default function LoginForm() {
                         </CardFooter>
                     </form>
                 </Form>
+                {message && <ErrorTip message={message} />}
             </Card>
         </div>
     )

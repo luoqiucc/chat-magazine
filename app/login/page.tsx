@@ -10,7 +10,5 @@ export default async function Login() {
         redirect('/')
     }
 
-    return (
-        <LoginForm />
-    )
+    return <LoginForm />
 }
