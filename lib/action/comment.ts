@@ -22,7 +22,7 @@ export async function createCommentAction(
         uid: getUid(),
         content: String(formData.get('content')) || '0',
         target_uid: String(formData.get('uid')) || '0',
-        user_id: String(loginUser[0].id) || '0'
+        user_id: Number(loginUser[0].id) || 0,
     }
 
     await commentService.create(comment)

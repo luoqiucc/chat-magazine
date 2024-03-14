@@ -1,5 +1,11 @@
 import query from './index'
 
+interface User {
+    uid: string,
+    name: string,
+    email: string,
+    password: string
+}
 class UserService {
     async getUserByEmail(email: string) {
         const statements = `SELECT * FROM users WHERE email = ?`
@@ -31,15 +37,16 @@ class UserService {
         return result
     }
 
-    async create(
-        uid: string,
-        name: string,
-        email: string,
-        password: string) {
+    async create(user: User) {
         const statements = `
             INSERT INTO users (uid, name, email, password) VALUES (?, ?, ?, ?);`
 
-        const [result] = await query(statements, [uid, name, email, password])
+        const [result] = await query(statements, [
+            user.uid,
+            user.name,
+            user.email,
+            user.password
+        ])
 
         return result
     }

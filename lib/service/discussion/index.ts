@@ -51,6 +51,12 @@ class DiscussionService {
         await query(statements, params)
     }
 
+    async remove(discussion: Discussion) {
+        const statements = `DELETE FROM discussions WHERE uid = ?`
+
+        await query(statements, [discussion.uid])
+    }
+
     /**
      * ! 这个方法存在一个性能问题，产生这个问题的原因是需要查询的数据分布在多张
      *   表中，这里会先给数据全查出来然后按条件组装。其中messages中的信息会被遍历
@@ -60,6 +66,39 @@ class DiscussionService {
      */
     async getAllDiscussions() {
         const discussions = await service.getAllDiscussion()
+
+        if (discussions.length === 0) {
+            return []
+        }
+
+        const discussionId = discussions.map((item) => {
+            return item = item.id
+        })
+        const discussionUid = discussions.map((item) => {
+            return item = item.uid
+        })
+        const messages = await service.getMessageByDiscussionId(discussionId)
+        const likes = await service.getLikesByDiscussionUid(discussionUid)
+        const comments = await service.getCommentsByDiscussionUid(discussionUid)
+
+        const discussionWithAllInfo = discussions.map((item) => {
+            const m = this.filterMessageByDiscussionId(messages, item.id)
+            const l = this.filterLikesByDiscussionUid(likes, item.uid)
+            const c = this.filterCommentByDiscussionUid(comments, item.uid)
+
+            return {
+                ...item,
+                messages: m,
+                comments: c,
+                likes: l,
+            }
+        })
+
+        return discussionWithAllInfo
+    }
+
+    async getDiscussionsByUid(discussion: Discussion) {
+        const discussions = await service.getDiscussionByUid(discussion.uid)
 
         const discussionId = discussions.map((item) => {
             return item = item.id

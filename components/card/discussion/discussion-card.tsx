@@ -11,7 +11,7 @@ import {
     DialogTrigger,
 } from '@/components/ui/dialog'
 
-import { User, ThumbsUp, MessageCircle, UserCheck } from 'lucide-react'
+import { User, MessageCircle, UserCheck } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { CreateCommentForm } from '@/components/form/comment-form'
 import { CreateLikesForm, RemoveLikesForm } from '@/components/form/likes-form'

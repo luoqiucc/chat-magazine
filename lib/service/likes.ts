@@ -3,7 +3,7 @@ import query from './index'
 interface Likes {
     uid: string
     target_uid: string
-    user_id: string
+    user_id: number
 }
 
 class LikesService {
@@ -22,6 +22,14 @@ class LikesService {
 
         await query(statements, [
             likes.user_id,
+            likes.target_uid,
+        ])
+    }
+
+    async removeByUid(likes: Likes) {
+        const statements = `DELETE FROM likes WHERE target_uid = ?;`
+
+        await query(statements, [
             likes.target_uid,
         ])
     }

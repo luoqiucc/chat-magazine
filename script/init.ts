@@ -202,8 +202,12 @@ async function initalizeData() {
     // 初始化设置表中的数据
     const insertRegisterSettingsStatements = `
         INSERT INTO settings (uid, name, value, title, description) VALUES (?, 'FREE_REGISTER', '0', '允许注册', '是否允许自由注册');`
+    // 初始化聊天角色表中的数据
+    const insertStarStatements = `
+        INSERT INTO stars (uid, nickname, avatar_url, description) VALUES (?, 'Guest', '0', '系统默认角色');`
 
     await query(insertRegisterSettingsStatements, [getUid()])
+    await query(insertStarStatements, [getUid()])
 
     // 初始化权限表中的数据
     const insertSettingPermissionsStatements = `

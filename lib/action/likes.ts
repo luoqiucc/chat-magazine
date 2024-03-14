@@ -6,6 +6,7 @@ import likesService from '@/lib/service/likes'
 import userService from '@/lib/service/user'
 import { getLoginUser } from '@/lib/auth/utils'
 import { getUid } from '@/lib/utils'
+import { number } from 'zod'
 
 export async function createLikesAction(
     formData: FormData,
@@ -21,7 +22,7 @@ export async function createLikesAction(
     const likes = {
         uid: getUid(),
         target_uid: String(formData.get('uid')) || '0',
-        user_id: String(loginUser[0].id) || '0'
+        user_id: Number(loginUser[0].id) || 0,
     }
 
     await likesService.create(likes)
@@ -42,8 +43,9 @@ export async function removeLikesAction(
     const loginUser = await userService.getUserByEmail(user.email)
 
     const likes = {
+        uid: '0',
         target_uid: String(formData.get('uid')) || '0',
-        user_id: String(loginUser[0].id) || '0'
+        user_id: Number(loginUser[0].id) || 0,
     }
 
     await likesService.remove(likes)

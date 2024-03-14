@@ -4,7 +4,7 @@ interface Comment {
     uid: string
     content: string
     target_uid: string
-    user_id: string
+    user_id: number
 }
 class CommentService {
     async create(comment: Comment) {
@@ -16,6 +16,12 @@ class CommentService {
             comment.target_uid,
             comment.user_id,
         ])
+    }
+
+    async removeByUid(comment: Comment) {
+        const statements = `DELETE FROM comments WHERE target_uid = ?`
+
+        await query(statements, [comment.target_uid])
     }
 }
 

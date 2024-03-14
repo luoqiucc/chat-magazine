@@ -3,8 +3,11 @@
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
-import disscussionService from '@/lib/service/discussion'
 import userService from '@/lib/service/user'
+import disscussionService from '@/lib/service/discussion'
+import messageService from '@/lib/service/message'
+import commentService from '@/lib/service/comment'
+import likesService from '@/lib/service/likes'
 import { getUid } from '@/lib/utils'
 import { getLoginUser } from '@/lib/auth/utils'
 
@@ -48,6 +51,36 @@ export async function createDisscussionAction(
 export async function deleteDisscussionAction(
     formData: FormData,
 ) {
+    const discussion = {
+        uid: String(formData.get('uid')) || '0',
+        title: '0',
+        description: '0',
+        user_id: 0,
+    }
+    const [{ uid, id }] = await disscussionService.getDiscussionsByUid(discussion)
 
-    revalidatePath('/')
+    await disscussionService.remove({
+        uid,
+        title: '0',
+        description: '0',
+        user_id: 0,
+    })
+
+    await commentService.removeByUid({
+        uid: '',
+        content: '',
+        target_uid: uid,
+        user_id: 0,
+    })
+
+    await likesService.removeByUid({
+        uid: '',
+        target_uid: uid,
+        user_id: 0,
+    })
+
+    await messageService.remove(id)
+
+    revalidatePath('/dashboard/discussion')
+    redirect('/dashboard/discussion')
 }

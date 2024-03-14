@@ -9,9 +9,28 @@ class Service {
             FROM 
                 discussions 
                 LEFT JOIN 
-                    users ON discussions.user_id = users.id;`
+                    users ON discussions.user_id = users.id
+            ORDER BY
+                discussions.create_timestamp DESC;`
 
         const [result] = await query(statements)
+
+        return result
+    }
+
+    async getDiscussionByUid(uid: string) {
+        const statements = `
+            SELECT 
+                discussions.*, 
+                users.name AS author 
+            FROM 
+                discussions 
+                LEFT JOIN 
+                    users ON discussions.user_id = users.id
+            WHERE
+                discussions.uid = ?;`
+
+        const [result] = await query(statements, [uid])
 
         return result
     }
@@ -65,6 +84,10 @@ class Service {
     }
 
     async getCommentsByDiscussionUid(uid: number[]) {
+        const foot = `
+            ORDER BY
+            comments.create_timestamp DESC`
+
         const head = `
             SELECT 
                 comments.*, users.uid, users.name, users.email
@@ -82,7 +105,7 @@ class Service {
 
         sql = sql.substring(0, sql.length - 1)
 
-        const statements = head + sql + ')'
+        const statements = head + sql + ')' + foot
         const [result] = await query(statements, [...uid])
 
         return result

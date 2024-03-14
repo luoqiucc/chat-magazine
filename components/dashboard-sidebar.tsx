@@ -29,7 +29,7 @@ const dashboardLinks = [
     },
     {
         href: '/dashboard/discussion',
-        title: '讨论',
+        title: '管理讨论',
         icon: MessageSquareText
     },
     {
@@ -49,7 +49,7 @@ export default function DashboardSidebar() {
             <section className="p-2 border-b">
                 <Nav links={[
                     {
-                        href: '/',
+                        href: '/discussion',
                         title: '前往主界面',
                         icon: Home
                     },

@@ -148,22 +148,6 @@ export function DeleteStarForm({ uid }: DeleteStarForm) {
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-                <FormField
-                    control={form.control}
-                    name='uid'
-                    render={({ field }) => (
-                        <FormItem>
-                            <FormLabel></FormLabel>
-                            <FormControl>
-                                <Input type="hidden" placeholder='输入角色昵称' {...field} />
-                            </FormControl>
-                            <FormDescription>
-
-                            </FormDescription>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
                 <Button
                     className="w-full"
                     type="submit"

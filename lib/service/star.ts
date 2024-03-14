@@ -5,6 +5,7 @@ interface Star {
     nickname: string
     description: string
     avatar_url: string
+    user_id: number
 }
 
 const STARS_TABLE = 'stars'
@@ -19,13 +20,14 @@ class StarService {
     }
 
     async createStar(star: Star) {
-        const statements = `INSERT INTO ${STARS_TABLE} (uid, nickname, description, avatar_url) VALUES (?,?,?,?);`
+        const statements = `INSERT INTO ${STARS_TABLE} (uid, nickname, description, avatar_url, user_id) VALUES (?, ?, ?, ?, ?);`
 
         await query(statements, [
             star.uid,
             star.nickname,
             star.description,
             star.avatar_url,
+            star.user_id,
         ])
     }
 
