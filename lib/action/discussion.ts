@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 
 import userService from '@/lib/service/user'
 import disscussionService from '@/lib/service/discussion'
@@ -46,13 +45,14 @@ export async function createDisscussionAction(
     await disscussionService.createMessages(formatMessages)
 
     revalidatePath('/discussion')
+    revalidatePath('/dashboard/discussion')
 }
 
 export async function deleteDisscussionAction(
     formData: FormData,
 ) {
     const discussion = {
-        uid: String(formData.get('uid')) || '0',
+        uid: String(formData.get('uid')),
         title: '0',
         description: '0',
         user_id: 0,
@@ -81,6 +81,6 @@ export async function deleteDisscussionAction(
 
     await messageService.remove(id)
 
+    revalidatePath('/discussion')
     revalidatePath('/dashboard/discussion')
-    redirect('/dashboard/discussion')
 }

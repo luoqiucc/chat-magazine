@@ -50,8 +50,17 @@ class Auth {
         return result
     }
 
-    async addRoot(id: number, uid: string) {
+    async addRootRole(id: number, uid: string) {
         const role = await this.getRoleByName('ROOT')
+        const statements = `INSERT INTO user_role (uid, user_id, role_id) VALUES (?, ?, ?)`
+
+        const [result] = await query(statements, [uid, id, role[0].id])
+
+        return result
+    }
+
+    async addUserRole(id: number, uid: string) {
+        const role = await this.getRoleByName('USER')
         const statements = `INSERT INTO user_role (uid, user_id, role_id) VALUES (?, ?, ?)`
 
         const [result] = await query(statements, [uid, id, role[0].id])

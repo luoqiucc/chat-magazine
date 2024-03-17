@@ -1,5 +1,6 @@
 import query from '../index'
 import service from './discussion'
+import { unstable_noStore as noStore } from 'next/cache'
 
 interface Discussion {
     uid: string
@@ -67,6 +68,40 @@ class DiscussionService {
     async getAllDiscussions() {
         const discussions = await service.getAllDiscussion()
 
+        if (discussions.length === 0) {
+            return []
+        }
+
+        const discussionId = discussions.map((item) => {
+            return item = item.id
+        })
+        const discussionUid = discussions.map((item) => {
+            return item = item.uid
+        })
+        const messages = await service.getMessageByDiscussionId(discussionId)
+        const likes = await service.getLikesByDiscussionUid(discussionUid)
+        const comments = await service.getCommentsByDiscussionUid(discussionUid)
+
+        const discussionWithAllInfo = discussions.map((item) => {
+            const m = this.filterMessageByDiscussionId(messages, item.id)
+            const l = this.filterLikesByDiscussionUid(likes, item.uid)
+            const c = this.filterCommentByDiscussionUid(comments, item.uid)
+
+            return {
+                ...item,
+                messages: m,
+                comments: c,
+                likes: l,
+            }
+        })
+
+        return discussionWithAllInfo
+    }
+
+    async getRandomDiscussions() {
+        noStore()
+
+        const discussions = await service.getRandomDiscussion()
         if (discussions.length === 0) {
             return []
         }

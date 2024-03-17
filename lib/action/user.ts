@@ -1,6 +1,5 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import settingsService from '@/lib/service/settings'
 import userService from '@/lib/service/user'
@@ -13,15 +12,20 @@ export async function registerUserAction(
 ) {
     const loginUser = await getLoginUser()
     const settings = await settingsService.getSettingByName({ name: 'FREE_REGISTER' })
-    const freeRegister = settings[0].value === 1
+    const freeRegister = Number(settings[0].value) === 1
 
     if (freeRegister) {
-        await userService.create({
-            uid: getUid(),
-            name: String(formData.get('name')) || '0',
-            email: String(formData.get('email')) || '0',
-            password: passwordEncoding(String(formData.get('email'))),
-        })
+        try {
+            const user = await userService.create({
+                uid: getUid(),
+                name: String(formData.get('name')),
+                email: String(formData.get('email')),
+                password: passwordEncoding(String(formData.get('password'))),
+            })
+            await authService.addUserRole(user.insertId, getUid())
+        } catch (e) {
+            return e.toString()
+        }
 
         redirect('/login')
     } else {
@@ -33,26 +37,36 @@ export async function registerUserAction(
             }
             const isAllow = await authService.selectAuthByUserId(auth)
             if (isAllow) {
-                await userService.create({
-                    uid: getUid(),
-                    name: String(formData.get('name')) || '0',
-                    email: String(formData.get('email')) || '0',
-                    password: passwordEncoding(String(formData.get('password'))),
-                })
+                try {
+                    const user = await userService.create({
+                        uid: getUid(),
+                        name: String(formData.get('name')),
+                        email: String(formData.get('email')),
+                        password: passwordEncoding(String(formData.get('password'))),
+                    })
+                    await authService.addUserRole(user.insertId, getUid())
+                } catch (e) {
+                    return e.toString()
+                }
+
+                redirect('/login')
             } else {
                 return 'error'
             }
         } else {
             const result = await userService.getAll()
             if (!result.length) {
-                const root = await userService.create({
-                    uid: getUid(),
-                    name: String(formData.get('name')) || '0',
-                    email: String(formData.get('email')) || '0',
-                    password: passwordEncoding(String(formData.get('password'))),
-                })
-
-                await authService.addRoot(root.insertId, getUid())
+                try {
+                    const root = await userService.create({
+                        uid: getUid(),
+                        name: String(formData.get('name')),
+                        email: String(formData.get('email')),
+                        password: passwordEncoding(String(formData.get('password'))),
+                    })
+                    await authService.addRootRole(root.insertId, getUid())
+                } catch (e) {
+                    return e.toString()
+                }
 
                 redirect('/login')
             } else {

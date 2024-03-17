@@ -1,7 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
 import commentService from '@/lib/service/comment'
 import userService from '@/lib/service/user'
 import { getLoginUser } from '@/lib/auth/utils'
@@ -20,13 +19,12 @@ export async function createCommentAction(
 
     const comment = {
         uid: getUid(),
-        content: String(formData.get('content')) || '0',
-        target_uid: String(formData.get('uid')) || '0',
-        user_id: Number(loginUser[0].id) || 0,
+        content: String(formData.get('content')),
+        target_uid: String(formData.get('uid')),
+        user_id: Number(loginUser[0].id),
     }
 
     await commentService.create(comment)
 
     revalidatePath('/discussion')
-    redirect('/discussion')
 }

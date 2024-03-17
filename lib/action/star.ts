@@ -1,8 +1,6 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
 import starService from '@/lib/service/star'
 import userService from '@/lib/service/user'
 import { getUid } from '@/lib/utils'
@@ -30,7 +28,6 @@ export async function createStarAction(
 
     revalidatePath('/dashboard/star')
     revalidatePath('/dashboard/editer')
-    redirect('/dashboard/star')
 }
 
 export async function deleteStarAction(
@@ -47,5 +44,5 @@ export async function deleteStarAction(
     await starService.deleteStar(star)
 
     revalidatePath('/dashboard/star')
-    redirect('/dashboard/star')
+    revalidatePath('/dashboard/editer')
 }

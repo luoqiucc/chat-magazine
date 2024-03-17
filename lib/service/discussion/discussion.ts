@@ -18,6 +18,24 @@ class Service {
         return result
     }
 
+    async getRandomDiscussion() {
+        const statements = `
+            SELECT 
+                discussions.*, 
+                users.name AS author 
+            FROM 
+                discussions 
+                LEFT JOIN 
+                    users ON discussions.user_id = users.id
+            ORDER BY
+                RAND()
+                LIMIT 3;`
+
+        const [result] = await query(statements)
+
+        return result
+    }
+
     async getDiscussionByUid(uid: string) {
         const statements = `
             SELECT 
@@ -86,7 +104,7 @@ class Service {
     async getCommentsByDiscussionUid(uid: number[]) {
         const foot = `
             ORDER BY
-            comments.create_timestamp DESC`
+                comments.create_timestamp DESC`
 
         const head = `
             SELECT 

@@ -49,7 +49,7 @@ export default function DashboardSidebar() {
             <section className="p-2 border-b">
                 <Nav links={[
                     {
-                        href: '/discussion',
+                        href: '/',
                         title: '前往主界面',
                         icon: Home
                     },

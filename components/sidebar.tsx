@@ -5,11 +5,11 @@ import ThemeToggle from '@/components/theme-toggle'
 import Nav from '@/components/nav'
 
 const links = [
-    // {
-    //     href: '/',
-    //     title: '首页',
-    //     icon: Home
-    // },
+    {
+        href: '/',
+        title: '首页',
+        icon: Home
+    },
     {
         href: '/discussion',
         title: '讨论',
